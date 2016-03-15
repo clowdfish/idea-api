@@ -1,0 +1,67 @@
+swagger: "2.0"
+info:
+  version: 0.0.1
+  title: IdeaBakery API
+# during dev, should point to your local machine
+host: localhost:10010
+basePath: /api
+schemes:
+  - http # remove to make production-grade
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+  - text/plain; charset=utf-8
+securityDefinitions:
+  apiKey:
+    type: apiKey
+    name: x-access-token
+    in: header
+paths:
+  /countries:
+    x-swagger-router-controller: app # name of the controller
+    get:
+      description: Returns all countries available in the back end.
+      operationId: countries # method name of the controller
+      tags:
+        - App
+      responses:
+        "200":
+          description: Country array
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+            
+  /account/upload:
+    x-swagger-router-controller: user
+    post:
+      description: Upload user data (images or documents).
+      operationId: upload
+      consumes:
+        - multipart/form-data
+      tags:
+        - User
+      security: 
+        - apiKey: []
+      parameters:
+        - name: file
+          in: formData
+          description: File to upload
+          required: true
+          type: file
+      responses:
+        "200":
+          description: Uploaded successfully.
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+            
+  /swagger:
+    x-swagger-pipe: swagger_raw

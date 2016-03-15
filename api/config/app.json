@@ -1,0 +1,5 @@
+{
+  "logLocation" : "/var/log/node/",
+  "temporaryFolderDir" : "api/temp",
+  "imageUploadDir": "static/images/uploaded"
+}

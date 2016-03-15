@@ -1,0 +1,22 @@
+{
+  "ambientDependencies": {
+    "async": "github:DefinitelyTyped/DefinitelyTyped/async/async.d.ts",
+    "bcrypt": "github:DefinitelyTyped/DefinitelyTyped/bcrypt/bcrypt.d.ts",
+    "express": "github:DefinitelyTyped/DefinitelyTyped/express/express.d.ts",
+    "jwt-simple": "github:DefinitelyTyped/DefinitelyTyped/jwt-simple/jwt-simple.d.ts",
+    "mime": "github:DefinitelyTyped/DefinitelyTyped/mime/mime.d.ts",
+    "moment-timezone": "github:DefinitelyTyped/DefinitelyTyped/moment-timezone/moment-timezone.d.ts",
+    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts",
+    "nodemailer": "github:DefinitelyTyped/DefinitelyTyped/nodemailer/nodemailer.d.ts",
+    "nodemailer-direct-transport": "github:DefinitelyTyped/DefinitelyTyped/nodemailer-direct-transport/nodemailer-direct-transport.d.ts",
+    "nodemailer-smtp-transport": "github:DefinitelyTyped/DefinitelyTyped/nodemailer-smtp-transport/nodemailer-smtp-transport.d.ts",
+    "nodemailer-types": "github:DefinitelyTyped/DefinitelyTyped/nodemailer/nodemailer-types.d.ts",
+    "passport": "github:DefinitelyTyped/DefinitelyTyped/passport/passport.d.ts",
+    "serve-static": "github:DefinitelyTyped/DefinitelyTyped/serve-static/serve-static.d.ts",
+    "underscore": "github:DefinitelyTyped/DefinitelyTyped/underscore/underscore.d.ts"
+  },
+  "dependencies": {
+    "es6-promise": "github:typings/typed-es6-promise",
+    "moment": "github:typings/typed-moment"
+  }
+}
