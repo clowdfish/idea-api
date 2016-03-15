@@ -1,8 +1,5 @@
 import jwt = require('jwt-simple');
-
-import UserService = require('./userService');
-
-var AuthConfig = require('../config/auth');
+var authSecret = "answer42!";
 
 /**
  * Checks the API key given with the request object and calls the callback
@@ -21,7 +18,7 @@ export function apiKey(req, def, scopes, callback) {
 
   if (token) {
     try {
-      var decoded = jwt.decode(token, AuthConfig.secret);
+      var decoded = jwt.decode(token, authSecret);
 
       // handle token here
       if (decoded.exp <= Date.now()) {
@@ -31,16 +28,9 @@ export function apiKey(req, def, scopes, callback) {
         });
       }
       else {
-        // attach user to request
-        UserService
-          .getProfile(decoded.iss)
-          .then(function (user) {
-            req.user = user;
-            callback();
-          })
-          .catch(function(err) {
-            throw err;
-          });
+        // TODO attach user to request
+        req.user = { id: decoded.iss };
+        callback();
       }
     } catch (err) {
       console.error('Error while decoding token: ' + err.message);

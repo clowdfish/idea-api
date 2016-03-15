@@ -2,25 +2,16 @@
 
 var express           = require('express'),
     runner            = require('swagger-node-runner'),
-    passport          = require('passport'),
     session           = require('express-session'),
     morgan            = require('morgan'),
     cookieParser      = require('cookie-parser'),
-    bodyParser        = require('body-parser'),
-    multiparty        = require('multiparty'),
-    languageKeyParser = require('./api/helpers/translateService').languageKeyParser;
+    bodyParser        = require('body-parser')
 
 // initiate server instance  ==================================================
 var app = express();
 
 // load configuration =========================================================
-var authConfig = require('./api/config/auth');
-var appConfig = require('./api/config/app');
-
 var port = process.env.PORT || 10010;
-
-// configuration of passport module ===========================================
-require('./api/helpers/passportHandler')(passport);
 
 // swagger configuration ======================================================
 var config = {
@@ -49,44 +40,8 @@ function setupServer() {
     resave: false,
     saveUninitialized: false // passport will take care
   }));
-  app.use(languageKeyParser);
 
-  app.set('jwtTokenSecret', authConfig.secret);
-  app.set('loginCallbackUrl', authConfig.loginCallbackUrl);
-
-  // setup authentication
-  app.use(passport.initialize());
-  app.use(passport.session()); // required for Twitter auth
-
-  /* Add multipart middleware */
-  app.use(function (req, res, next) {
-
-    if (req.url === '/api/account/upload' && req.method === 'POST') {
-
-      var form = new multiparty.Form({
-        autoFiles: true,
-        uploadDir: appConfig['temporaryFolderDir']
-      });
-
-      form.parse(req, function(err, fields, files) {
-
-        if(err)
-          return res.status(500).json({
-            message: err.message
-          });
-
-        if(!files || !files.hasOwnProperty('file'))
-          return res.status(500).json({
-            message: 'No files provided.'
-          });
-
-        req.files = files;
-        next();
-      });
-    }
-    else
-      next();
-  });
+  app.set('jwtTokenSecret', 'answer42!');
 }
 
 // start server ===============================================================

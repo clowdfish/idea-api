@@ -1,0 +1,77 @@
+$schema: 'http://json-schema.org/draft-04/schema#'
+definitions:
+  User:
+    id: User
+    type: object
+    description: 'The user object being attached to the response.'
+    properties:
+      id:
+        type: number
+      email:
+        type: string
+      licence:
+        id: UserLicence
+        enum:
+          - free
+          - pro
+          - business
+      twitter:
+        description: 'Twitter user name'
+        type: string
+      token:
+        description: 'Auth token that must be send to the back end API with every request'
+        type: string
+    required:
+      - id
+      - email
+    additionalProperties: false
+  ErrorResponse:
+    id: ErrorResponse
+    type: object
+    description: 'Server response in case of an error.'
+    properties:
+      message:
+        description: 'Error message'
+        type: string
+      statusCode:
+        description: 'HTTP status code of response'
+        type: number
+    required:
+      - message
+    additionalProperties: false
+  ResetInformation:
+    id: ResetInformation
+    type: object
+    description: 'The information needed to reset the password.'
+    properties:
+      resetToken:
+        type: string
+      newPassword:
+        type: string
+    required:
+      - resetToken
+      - newPassword
+    additionalProperties: false
+  Identity:
+    id: Identity
+    type: object
+    description: 'The information to identify a user.'
+    properties:
+      email:
+        type: string
+    required:
+      - email
+    additionalProperties: false
+  LoginInformation:
+    id: LoginInformation
+    type: object
+    description: 'Login information for the user.'
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - email
+      - password
+    additionalProperties: false
