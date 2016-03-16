@@ -17,18 +17,32 @@ export interface User {
  */
 export interface Idea {
 
-  id: number;
+  id?: number;
   title: string;
   description: string;
 
   /** List of image urls */
-  images: string[];
+  images?: string[];
 
   /** The email of the creating user */
   creator: string;
 
   /** A list of email addresses of the owners of that idea. */
   owners: string[];
+
+  messages?:Message[];
+}
+
+/**
+ * A message that users send to each other within the idea management tool.
+ */
+export interface Message {
+
+  email:string;
+
+  text: string;
+
+  date?: string;
 }
 
 /**

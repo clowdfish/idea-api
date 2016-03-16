@@ -10,8 +10,6 @@ pids
 
 # Transpiled Javascript files
 dist/
-api/**/*.js
-api/**/*.js.map
 
 # Defintion files
 typings/
@@ -30,9 +28,6 @@ lib-cov
 
 # Coverage directory used by tools like istanbul
 coverage
-
-# Compiled binary addons (http://nodejs.org/api/addons.html)
-build/Release
 
 # Dependency directory
 # Commenting this out is preferred by some people, see

@@ -79,7 +79,21 @@ paths:
           description: Error
           schema:
             $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
-            
+  /ideas/{id}/like:
+    x-swagger-router-controller: ideaController
+    post:
+      description: Like an idea.
+      operationId: likeIdea
+      tags:
+        - Ideas
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+    
   /campaigns:
     x-swagger-router-controller: campaignController
     get:

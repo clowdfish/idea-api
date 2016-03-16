@@ -43,13 +43,30 @@ definitions:
         type: array
         items:
           type: string
+      messages:
+        type: array
+        items:
+          $ref: '#/definitions/Message'
     required:
-      - id
       - title
       - description
-      - images
       - creator
       - owners
+    additionalProperties: false
+  Message:
+    id: Message
+    type: object
+    description: 'A message that users send to each other within the idea management tool.'
+    properties:
+      email:
+        type: string
+      text:
+        type: string
+      date:
+        type: string
+    required:
+      - email
+      - text
     additionalProperties: false
   Campaign:
     id: Campaign

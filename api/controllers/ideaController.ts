@@ -5,7 +5,8 @@
 export = {
   addIdea: IdeaController.addIdea,
   getIdea: IdeaController.getIdea,
-  getIdeas: IdeaController.getIdeas
+  getIdeas: IdeaController.getIdeas,
+  likeIdea: IdeaController.likeIdea
 };
 
 /**
@@ -40,6 +41,16 @@ module IdeaController {
    * @param res
    */
   export function getIdeas(req, res) {
+
+  }
+
+  /**
+   *
+   *
+   * @param req
+   * @param res
+   */
+  export function likeIdea(req, res) {
 
   }
 }

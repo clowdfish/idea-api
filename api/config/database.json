@@ -1,9 +1,9 @@
 {
   "connection" : {
-    "host"      : "localhost",
-    "user"      : "root",
-    "password"  : "",
-    "database"  : "1clicktrips",
-    "multipleStatements": true
+    "host"      : "ec2-54-247-79-142.eu-west-1.compute.amazonaws.com",
+    "port"      : 5432,
+    "username"  : "fuxusvvoaytsxy",
+    "password"  : "DlZhyT6cSK_RjfMMqoLJxA_3j7",
+    "database"  : "derfkhn7q7hn8f"
   }
 }

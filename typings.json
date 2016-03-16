@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "es6-promise": "github:typed-typings/npm-es6-promise#fb04188767acfec1defd054fc8024fafa5cd4de7",
-    "moment": "github:typings/typed-moment"
+    "moment": "github:typings/typed-moment",
+    "pg": "github:goenning/typed-pg#83236e7c54254e5e4135efc79280c91d3ba2d819"
   }
 }
