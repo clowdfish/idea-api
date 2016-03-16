@@ -3,18 +3,12 @@ definitions:
   User:
     id: User
     type: object
-    description: 'The user object being attached to the response.'
+    description: 'User profile data structure.'
     properties:
       id:
         type: number
       email:
         type: string
-      licence:
-        id: UserLicence
-        enum:
-          - free
-          - pro
-          - business
       twitter:
         description: 'Twitter user name'
         type: string
@@ -24,6 +18,60 @@ definitions:
     required:
       - id
       - email
+    additionalProperties: false
+  Idea:
+    id: Idea
+    type: object
+    description: 'Idea data structure.'
+    properties:
+      id:
+        type: number
+      title:
+        type: string
+      description:
+        type: string
+      images:
+        description: 'List of image urls'
+        type: array
+        items:
+          type: string
+      creator:
+        description: 'The email of the creating user'
+        type: string
+      owners:
+        description: 'A list of email addresses of the owners of that idea.'
+        type: array
+        items:
+          type: string
+    required:
+      - id
+      - title
+      - description
+      - images
+      - creator
+      - owners
+    additionalProperties: false
+  Campaign:
+    id: Campaign
+    type: object
+    description: 'Campaign data structure.'
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      image:
+        description: 'Title image url'
+        type: string
+      ideas:
+        type: array
+        items:
+          $ref: '#/definitions/Idea'
+    required:
+      - title
+      - description
+      - image
+      - ideas
     additionalProperties: false
   ErrorResponse:
     id: ErrorResponse
@@ -38,40 +86,4 @@ definitions:
         type: number
     required:
       - message
-    additionalProperties: false
-  ResetInformation:
-    id: ResetInformation
-    type: object
-    description: 'The information needed to reset the password.'
-    properties:
-      resetToken:
-        type: string
-      newPassword:
-        type: string
-    required:
-      - resetToken
-      - newPassword
-    additionalProperties: false
-  Identity:
-    id: Identity
-    type: object
-    description: 'The information to identify a user.'
-    properties:
-      email:
-        type: string
-    required:
-      - email
-    additionalProperties: false
-  LoginInformation:
-    id: LoginInformation
-    type: object
-    description: 'Login information for the user.'
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    required:
-      - email
-      - password
     additionalProperties: false

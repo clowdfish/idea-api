@@ -10,6 +10,8 @@ pids
 
 # Transpiled Javascript files
 dist/
+api/**/*.js
+api/**/*.js.map
 
 # Defintion files
 typings/

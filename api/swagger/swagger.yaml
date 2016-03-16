@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: 0.0.1
+  version: 0.1.0
   title: IdeaBakery API
 # during dev, should point to your local machine
 host: localhost:10010
@@ -8,60 +8,257 @@ basePath: /api
 schemes:
   - http # remove to make production-grade
   - https
-# format of bodies a client can send (Content-Type)
 consumes:
   - application/json
-# format of the responses to the client (Accepts)
 produces:
   - application/json
   - text/plain; charset=utf-8
-securityDefinitions:
-  apiKey:
-    type: apiKey
-    name: x-access-token
-    in: header
 paths:
-  /countries:
-    x-swagger-router-controller: app # name of the controller
+  /ideas:
+    x-swagger-router-controller: ideaController
     get:
-      description: Returns all countries available in the back end.
-      operationId: countries # method name of the controller
+      description: Get a list of all ideas.
+      operationId: getIdeas
       tags:
-        - App
+        - Ideas
+      parameters:
+        - name: query
+          in: query
+          description: Query for specific ideas
+          type: string
+          required: false
       responses:
         "200":
-          description: Country array
+          description: List of all public ideas
           schema:
-            type: string
+            type: array
+            items:
+              $ref: "http://localhost:8088/definitions.yaml#/definitions/Idea"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
+    post:
+      description: Post a new idea.
+      operationId: addIdea
+      tags:
+        - Ideas
+      parameters:
+        - name: idea
+          in: body
+          description: Idea object.
+          schema: 
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/Idea"
+          required: true
+      responses:
+        "200":
+          description: Success
         default:
           description: Error
           schema:
             $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+  /ideas/{id}:
+    x-swagger-router-controller: ideaController
+    get:
+      description: Get one specific idea.
+      operationId: getIdea
+      tags:
+        - Ideas
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier for idea
+          type: number
+          required: true
+      responses:
+        "200":
+          desccription: Idea with the given id.
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/Idea"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
             
-  /account/upload:
-    x-swagger-router-controller: user
+  /campaigns:
+    x-swagger-router-controller: campaignController
+    get:
+      description: Get a list of all campaigns.
+      operationId: getCampaigns
+      tags:
+        - Campaigns
+      parameters:
+        - name: query
+          in: query
+          description: Query for specific campaign
+          type: string
+          required: false
+      responses:
+        "200":
+          description: List of all available campaign
+          schema:
+            type: array
+            items:
+              $ref: "http://localhost:8088/definitions.yaml#/definitions/Campaign"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
     post:
-      description: Upload user data (images or documents).
-      operationId: upload
-      consumes:
-        - multipart/form-data
+      description: Post a new campaign.
+      operationId: addCampaign
+      tags:
+        - Campaigns
+      parameters:
+        - name: campaign
+          in: body
+          description: Campaign object.
+          schema: 
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/Campaign"
+          required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+  /campaigns/{id}:
+    x-swagger-router-controller: campaignController
+    get:
+      description: Get one specific campaign.
+      operationId: getCampaign
+      tags:
+        - Campaigns
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier for campaign
+          type: number
+          required: true
+      responses:
+        "200":
+          description: Campaign with the given id.
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/Campaign"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
+  /campaigns/{id}/ideas:
+    x-swagger-router-controller: campaignController
+    get:
+      description: Get a list of all ideas related to the campaign.
+      operationId: getIdeasForCampaign
+      tags:
+        - Campaigns
+        - Ideas
+      responses:
+        "200":
+          description: List of ideas for the given campaign.
+          schema:
+            type: array
+            items:
+              $ref: "http://localhost:8088/definitions.yaml#/definitions/Idea"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse" 
+  
+  /me/profile:
+    x-swagger-router-controller: userController
+    get:
+      description: Get profile information.
+      operationId: getProfile
       tags:
         - User
-      security: 
-        - apiKey: []
-      parameters:
-        - name: file
-          in: formData
-          description: File to upload
-          required: true
-          type: file
       responses:
         "200":
-          description: Uploaded successfully.
+          description: User profile of the logged in user.
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/User"
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"        
+    post:
+      description: Change a profile item.
+      operationId: updateProfile
+      tags:
+        - User
+      parameters:
+        - name: profileItem
+          in: body
+          description: Profile settings object.
+          schema: 
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/User"
+          required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"  
+  /me/ideas:
+    x-swagger-router-controller: userController
+    get:
+      description: Get ideas related to that user.
+      operationId: getIdeasRelatedToUser
+      tags:
+        - User
+      responses:
+        "200":
+          description: List of ideas related to the user.
+          schema:
+            type: array
+            items:
+              $ref: "http://localhost:8088/definitions.yaml#/definitions/Idea"
         default:
           description: Error
           schema:
             $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
-            
+  
+  /config/integrations/{id}:
+    x-swagger-router-controller: appController
+    put:
+      description: Activates an integration with the given configuration.
+      operationId: activateIntegration
+      tags:
+        - App
+      parameters:
+        - name: id
+          in: path
+          description: Integration's id
+          type: string
+          required: true
+        - name: config
+          in: body
+          description: Configuration JSON
+          required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+    delete:
+      description: Deactivate an integration with the given id.
+      operationId: deactivateIntegration 
+      tags:
+        - App
+      parameters:
+        - name: id
+          in: path
+          description: Integration's id
+          required: true
+      responses:
+        "200":
+          description: Sucess
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"        
   /swagger:
     x-swagger-pipe: swagger_raw
