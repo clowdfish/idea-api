@@ -52,7 +52,9 @@ paths:
           required: true
       responses:
         "200":
-          description: Success
+          description: The link to the new idea
+          schema:
+            type: string
         default:
           description: Error
           schema:
@@ -93,7 +95,29 @@ paths:
           description: Error
           schema:
             $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
-    
+  /ideas/{id}/link:
+    x-swagger-router-controller: ideaController
+    get:
+      description: Get one specific idea.
+      operationId: getLinkToIdea
+      tags:
+        - Ideas
+      parameters:
+        - name: id
+          in: path
+          description: Unique identifier for idea
+          type: number
+          required: true
+      responses:
+        "200":
+          description: Link to the given idea
+          schema:
+            type: string
+        default:
+          description: Error
+          schema:
+            $ref: "http://localhost:8088/definitions.yaml#/definitions/ErrorResponse"
+
   /campaigns:
     x-swagger-router-controller: campaignController
     get:
