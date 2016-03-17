@@ -30,7 +30,7 @@ module UserController {
    * @param res
    */
   export function getProfile(req, res) {
-
+    res.status(200).send('http://www.dicketitten.com');
   }
 
   /**

@@ -9,12 +9,12 @@ var connectionString = "postgres://"
     + dbConfig.connection.password + "@"
     + dbConfig.connection.host + ":"
     + dbConfig.connection.port + "/"
-    + dbConfig.connection.database;
+    + dbConfig.connection.database + "?ssl=true";
 
 /**
  * Database wrapper for the PostgreSQL database.
  */
-class Database {
+export class Database {
 
   /**
    *
