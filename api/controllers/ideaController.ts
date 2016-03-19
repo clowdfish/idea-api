@@ -67,6 +67,8 @@ module IdeaController {
                         isNew: false
                     });
                     console.log("Already in DB, so END IT HERE!");
+                    return new Promise<any>(function(resolve, reject) { reject(null) });
+
                 } else {
                     // does not exist
 
@@ -86,7 +88,6 @@ module IdeaController {
             })
             .then(function (ideaKey) {
                 // Idea is created. Get the ideaID for relations.
-                // TODO: this is still executed even when the idea is found already. and res.status sent. STOP IT!
                 console.log('Getting ideaID');
                 return Database.query("SELECT id FROM idea WHERE unique_key='" + ideaKey + "';");
 
@@ -135,7 +136,8 @@ module IdeaController {
                 });
             })
             .catch(function (err) {
-                res.status(500).json(err);
+                if (err != null)
+                    res.status(500).json(err);
             });
 
         //Database.query("SELECT ...")
