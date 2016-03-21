@@ -14,7 +14,8 @@ export = {
     getIdea: IdeaController.getIdea,
     getIdeas: IdeaController.getIdeas,
     getLinkToIdea: IdeaController.getLinkToIdea,
-    likeIdea: IdeaController.likeIdea
+    likeIdea: IdeaController.likeIdea,
+    addMessage: IdeaController.addMessage
 };
 
 /**
@@ -48,7 +49,7 @@ module IdeaController {
      */
     export function addIdea(req, res) {
 
-        //console.log(req.body);
+        console.log(req);
 
         var ideaKey;
 
@@ -151,6 +152,14 @@ module IdeaController {
         //res.status(200).send('http://www.dicketitten.com');
     }
 
+    /**
+     *
+     *
+     * @param creator
+     * @param owner
+     * @param ideaID
+     * @returns {}
+     */
     function do_AddEmployee(creator, owner, ideaID) {
 
         return new Promise(function (resolve, reject) {
@@ -235,6 +244,7 @@ module IdeaController {
         var ideaId = parseInt(pathArray[pathArray.length - 1]);
 
         // TODO retrieve idea from database
+        
     }
 
     /**
@@ -259,5 +269,19 @@ module IdeaController {
         var ideaId = parseInt(pathArray[pathArray.length - 2]);
 
         // TODO update like counter of idea
+    }
+
+    /**
+     *
+     *
+     * @param req
+     * @param res
+     */
+    export function addMessage(req, res) {
+
+        var pathArray = req.path.split('/');
+        var ideaId = parseInt(pathArray[pathArray.length - 2]);
+
+        // TODO implement
     }
 }
