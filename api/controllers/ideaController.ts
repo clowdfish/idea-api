@@ -52,6 +52,7 @@ module IdeaController {
         console.log(req);
 
         var ideaKey;
+        var ideaID;
 
         // Check if idea exists
         Database.query("SELECT unique_key FROM idea WHERE title='" + req.body.title + "'")
@@ -60,11 +61,11 @@ module IdeaController {
 
                 if (result.rowCount >= 1) {
                     // Exists
-                    ideaKey = result.rows[0].unique_key;
+                    ideaID = result.rows[0].id;
                     //return ideaKey;
 
                     res.status(200).json({
-                        key: ideaKey,
+                        key: ideaID,
                         isNew: false
                     });
                     console.log("Already in DB, so END IT HERE!");
@@ -97,7 +98,7 @@ module IdeaController {
                 console.log(result);
 
                 console.log(result.rows[0].id);
-                var ideaID = result.rows[0].id;
+                ideaID = result.rows[0].id;
                 // INSERT EMPLOYEES
 
                 var promiseArray = [];
@@ -132,7 +133,7 @@ module IdeaController {
                 console.log("THIS IS THE END");
 
                 res.status(200).json({
-                    key: ideaKey,
+                    key: ideaID,
                     isNew: true
                 });
             })
@@ -244,17 +245,94 @@ module IdeaController {
         var ideaId = parseInt(pathArray[pathArray.length - 1]);
 
         // TODO retrieve idea from database
-        
+        /*
+        -- DETAILS TO IDEA
+        SELECT * FROM idea
+        WHERE idea.id=7;
+
+        -- EMPLOYEES TO IDEA
+        SELECT e.name, e.surname, e.email, r.title FROM employee e
+        INNER JOIN employee_role er ON e.id = er.employee_id
+        INNER JOIN role r ON er.role_role_id = r.role_id
+        WHERE er.idea_id =7
+
+        -- MESSAGES TO IDEA
+        SELECT name, surname, email, date, message
+        FROM messages m
+        INNER JOIN employee e ON m.employee_id=e.id
+        WHERE idea_id = 7
+        ORDER BY m.id ASC
+        */
+
+        var curIdea;
+        var owners;
+        var messages;
+
+        // GET DETAILS TO IDEA
+        Database.query("SELECT * FROM idea WHERE idea.id="+ideaId+";")
+            .then(function(result) {
+                // ASSIGN DETAILS TO IDEA
+                curIdea = result.rows[0];
+                // GET EMPLOYEES TO IDEA
+                return Database.query("SELECT e.name, e.surname, e.email, r.title FROM employee e INNER JOIN employee_role er ON e.id = er.employee_id INNER JOIN role r ON er.role_role_id = r.role_id WHERE er.idea_id ="+ideaId+" ");
+            })
+            .then(function(result) {
+                // ASSIGN EMPLOYEES TO IDEA
+                owners = result.rows;
+                // GET MESSAGES TO IDEA
+                return Database.query("SELECT name, surname, email, date, message FROM messages m INNER JOIN employee e ON m.employee_id=e.id WHERE idea_id = 7 ORDER BY m.id ASC");
+            })
+            .then(function(result) {
+                // ASSIGN MESSAGES TO IDEA
+                messages = result.rows;
+
+                curIdea.owners = owners;
+                curIdea.messages = messages;
+
+                res.status(200).send(curIdea);
+            })
+            .catch(function (err) {
+                if (err != null)
+                    res.status(500).json(err);
+            });
     }
 
     /**
      * Get a list of all ideas. Could include a query parameter.
+     * NEW: only get ideas relevant to user
      *
      * @param req
      * @param res
      */
     export function getIdeas(req, res) {
+        console.log(req);
+        var userID = req.body.id
 
+        /*SELECT i.id, i.title as ideaTitle, i.description, i.image, i.unique_key, role.role_id, role.title as roleTitle
+         FROM idea i
+         INNER JOIN (
+         SELECT idea_id, MIN(role_role_id) as dominantRole
+         FROM employee_role
+         WHERE employee_id = 2
+         GROUP BY idea_id
+         ) employee_role ON i.id = employee_role.idea_id
+         INNER JOIN role ON role.role_id = employee_role.dominantRole*/
+        Database.query("SELECT i.id, i.title as ideaTitle, i.description, i.image, i.unique_key, role.role_id, role.title as roleTitle\
+                FROM idea i\
+                INNER JOIN (\
+                    SELECT idea_id, MIN(role_role_id) as dominantRole\
+                    FROM employee_role\
+                    WHERE employee_id = "+userID+"\
+                    GROUP BY idea_id\
+                ) employee_role ON i.id = employee_role.idea_id\
+                INNER JOIN role ON role.role_id = employee_role.dominantRole")
+            .then(function(result) {
+                return result;
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+        res.status(200).send(req);
     }
 
     /**
@@ -282,6 +360,14 @@ module IdeaController {
         var pathArray = req.path.split('/');
         var ideaId = parseInt(pathArray[pathArray.length - 2]);
 
-        // TODO implement
+        // TODO finish
+        Database.query("INSERT INTO messages (employee_id, idea_id, message) VALUES ((SELECT id FROM employee WHERE email='"+req.body.message.employee+"'), "+ideaId+", '"+req.body.message.text+"')")
+            .then(function(result) {
+                return result;
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
+
     }
 }
